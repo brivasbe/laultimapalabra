@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ten la última palabra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#14101a;--panel:#1c1622;--line:#332a3d;--gold:#c9a227;--crimson:#a5384c;--ivory:#f2ece1;--muted:#8f869a;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:inherit}
+body{margin:0;color:var(--ivory);min-height:100%;background:radial-gradient(ellipse at 50% -10%,#241a2e 0%,var(--bg) 55%);
+  font-family:'Fraunces',Georgia,serif;display:flex;justify-content:center}
+.wrap{width:100%;max-width:600px;padding:36px 20px 64px}
+header{text-align:center;margin-bottom:26px}
+.crown{font-size:1.9rem}
+h1{font-weight:700;font-size:2.1rem;margin:6px 0 8px;letter-spacing:-.01em}
+.tagline{color:var(--muted);font-size:.95rem;max-width:420px;margin:0 auto;line-height:1.55}
+.tagline::after{content:"";display:block;width:36px;height:2px;background:var(--gold);margin:18px auto 0;opacity:.6}
+.throne{border:1px solid var(--line);background:linear-gradient(180deg,#221a2b 0%,var(--panel) 100%);padding:30px 22px;margin-bottom:22px;
+  transition:box-shadow .6s ease,border-color .6s ease}
+.throne.flash{box-shadow:0 0 0 2px var(--crimson);border-color:var(--crimson)}
+.price-row{display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;margin-bottom:16px}
+.price{font-size:2rem;color:var(--gold);font-weight:600}
+.reigns{font-size:.78rem;color:var(--muted)}
+.message{font-size:1.25rem;line-height:1.4;margin-bottom:12px;word-break:break-word}
+.holder{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--muted)}
+.clock{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:.82rem;line-height:1.7}
+.clock b{color:var(--ivory);font-weight:600}
+fieldset{border:0;padding:0;margin:0;min-width:0}fieldset:disabled{opacity:.4}
+.rules{border:1px solid var(--line);border-left:3px solid var(--crimson);background:var(--panel);padding:16px;margin-bottom:18px;font-size:.88rem;line-height:1.55}
+.rules b{color:var(--gold)}.rules ul{margin:8px 0 14px;padding-left:18px}.rules li{margin-bottom:6px}.rules .check{margin:0;color:var(--ivory)}
+label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
+input,select{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ivory);padding:11px 12px;
+  font-family:'Fraunces',Georgia,serif;font-size:1rem;margin-bottom:14px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:16px;
+  font-family:'Fraunces',Georgia,serif}
+.check input{width:auto;margin:3px 0 0}
+button{width:100%;background:linear-gradient(180deg,#dab53a,var(--gold));color:var(--bg);border:none;padding:14px;
+  font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.92rem;cursor:pointer;transition:transform .15s ease,filter .15s ease}
+button:hover{filter:brightness(1.05)}button:active{transform:scale(.98)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.status{font-size:.85rem;text-align:center;margin-top:10px;min-height:1.2em;color:var(--gold)}
+.status.err{color:#e0788a}
+.note{font-size:.76rem;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+.history{margin-top:30px}
+.history h2{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--muted);font-weight:600;margin-bottom:8px}
+.hitem{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.86rem}
+.hitem .h-msg{color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hitem .h-price{font-family:'IBM Plex Mono',monospace;color:var(--gold);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="crown">👑</div>
+  <h1>Ten la última palabra</h1>
+  <p class="tagline">El trono solo tiene sitio para una frase. Págala, y es tuya — hasta que alguien pague más que tú.</p>
+</header>
+
+<div class="throne" id="throne">
+  <div class="price-row"><span class="price" id="price">…</span><span class="reigns" id="reigns"></span></div>
+  <div class="message" id="message"></div>
+  <div class="holder" id="holder"></div>
+  <div class="clock">
+    <div>Lleva reinando: <b id="reign">—</b></div>
+    <div>Récord de reinado: <b id="record">—</b></div>
+  </div>
+</div>
+
+<div id="form">
+  <div class="rules">
+    <b>Antes de empezar, lee cómo funciona el dinero:</b>
+    <ul>
+      <li>Pagas el <b>importe completo</b> de tu puja, no la diferencia. Si el trono está en 3 € y tú pagas 4 €, pagas 4 €.</li>
+      <li><b>Nada se reembolsa.</b> Lo que pagó la persona anterior no se le devuelve, y lo que pagues tú tampoco se te devolverá si alguien te supera.</li>
+      <li>Puedes pagar la cantidad que quieras, siempre que sea al menos 1 € más que el precio actual.</li>
+      <li>Un revisor automático comprueba tu nombre y tu mensaje antes de cobrar. Si incumplen las normas (insultos, contenido sexual o explícito, violencia, datos personales, enlaces, publicidad), se rechazan y no se te cobra nada. Tampoco se cobra si alguien paga antes que tú.</li>
+      <li>Tu email solo sirve para avisarte si te quitan el trono. Nunca se muestra.</li>
+    </ul>
+    <label class="check"><input type="checkbox" id="accept"><span>He leído y acepto estas condiciones, incluido que ningún pago es reembolsable y que me envíen un email si me quitan el trono.</span></label>
+  </div>
+  <fieldset id="fields" disabled>
+    <label for="name">Tu nombre público (un apodo; se revisa igual que el mensaje)</label>
+    <input id="name" maxlength="24" placeholder="¿Cómo te llamamos?" autocomplete="nickname">
+    <label for="msg">Tu mensaje (máx. 60 caracteres)</label>
+    <input id="msg" maxlength="60" placeholder="Lo que quieras que vea todo el mundo">
+    <label for="email">Tu email (solo para avisarte si te quitan el trono)</label>
+    <input id="email" type="email" placeholder="tu@email.com" autocomplete="email">
+    <label for="amount">Cuánto pagas (mínimo <span id="minPrice"></span>, IVA incluido). Pagarás exactamente esta cantidad.</label>
+    <input id="amount" type="number" step="0.01" inputmode="decimal">
+    <button id="submit">Pagar y reclamar el trono</button>
+  </fieldset>
+  <p class="status" id="status"></p>
+</div>
+
+<div class="history">
+  <h2>Últimos reinados</h2>
+  <div id="hist"></div>
+</div>
+<p class="note">Si ves un mensaje que incumple las normas, escríbenos a TU-EMAIL@TUDOMINIO.COM.</p>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const eur = c => (c/100).toFixed(2).replace('.', ',') + ' €';
+const nextMin = p => p ? p + 100 : 100;
+const esc = s => { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
+const dur = s => { s = Math.max(0, Math.floor(s)); const d = Math.floor(s/86400), h = Math.floor(s%86400/3600), m = Math.floor(s%3600/60), x = s%60;
+  return (d ? d+'d ' : '') + (h || d ? h+'h ' : '') + (m || h || d ? m+'m ' : '') + x+'s'; };
+let S = null, offset = 0, lastReigns = null, busy = false;
+
+async function load(){
+  try{
+    const r = await fetch('/api/state'); S = await r.json();
+    offset = new Date(S.now) - Date.now();
+    const t = S.throne, min = nextMin(t.price_cents);
+    $('price').textContent = t.reigns ? eur(t.price_cents) : 'Desde ' + eur(100);
+    $('reigns').textContent = t.reigns + (t.reigns===1 ? ' reinado' : ' reinados');
+    $('message').textContent = t.message;
+    $('holder').textContent = 'Puesto por ' + t.holder;
+    $('minPrice').textContent = eur(min);
+    $('amount').min = min/100;
+    if(!$('amount').dataset.touched) $('amount').value = (min/100).toFixed(2);
+    $('hist').innerHTML = S.history.length
+      ? S.history.map(h => `<div class="hitem"><span class="h-msg">${esc(h.holder)}: ${esc(h.message)}</span><span class="h-price">${eur(h.price_cents)} · ${dur((new Date(h.ended)-new Date(h.started))/1000)}</span></div>`).join('')
+      : '<p class="note">Todavía nadie ha pujado.</p>';
+    if(lastReigns !== null && t.reigns !== lastReigns){
+      $('throne').classList.add('flash'); setTimeout(()=>$('throne').classList.remove('flash'), 900);
+    }
+    lastReigns = t.reigns;
+    updatePay(); tick();
+  }catch(e){}
+}
+function updatePay(){
+  const a = Math.round((parseFloat($('amount').value)||0)*100);
+  $('submit').textContent = a ? 'Pagar ' + eur(a) + ' y reclamar el trono' : 'Pagar y reclamar el trono';
+}
+function tick(){
+  if(!S) return;
+  const t = S.throne, cur = t.reigns ? (Date.now() + offset - new Date(t.since))/1000 : 0;
+  $('reign').textContent = t.reigns ? dur(cur) : '—';
+  $('record').textContent = (S.record || cur) ? dur(Math.max(S.record, cur)) : '—';
+  $('submit').disabled = busy;
+}
+$('amount').addEventListener('input', () => { $('amount').dataset.touched = 1; updatePay(); });
+$('accept').addEventListener('change', () => { $('fields').disabled = !$('accept').checked; });
+
+$('submit').addEventListener('click', async () => {
+  const say = (t, err) => { $('status').textContent = t; $('status').className = 'status' + (err ? ' err' : ''); };
+  const body = { name: $('name').value.trim(), message: $('msg').value.trim(), email: $('email').value.trim(),
+    amount: parseFloat($('amount').value), accept: $('accept').checked };
+  if(!body.accept) return say('Marca la casilla de aceptación para continuar.', true);
+  if(!body.name || !body.message || !body.email) return say('Rellena tu nombre, tu mensaje y tu email.', true);
+  busy = true; tick(); say('Revisando tu nombre y tu mensaje…');
+  try{
+    const r = await fetch('/api/bid', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const j = await r.json();
+    if(!r.ok) throw new Error(j.error || 'Algo ha fallado.');
+    say('Te llevamos al pago seguro…');
+    location.href = j.url;
+  }catch(e){ say(e.message, true); busy = false; tick(); }
+});
+
+const q = new URLSearchParams(location.search).get('pago');
+if(q){
+  $('status').textContent = q==='ok' ? '¡Pago recibido! Si nadie se te ha adelantado, el trono ya es tuyo.' : 'Pago cancelado: no se ha cobrado nada.';
+  history.replaceState(null, '', '/');
+}
+load(); setInterval(load, 5000); setInterval(tick, 1000);
+</script>
+</body>
+</html>
